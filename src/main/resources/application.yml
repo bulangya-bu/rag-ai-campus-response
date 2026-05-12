@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: campus-ai-qa
+  datasource:
+    url: jdbc:mysql://localhost:3306/campus_ai_qa?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&createDatabaseIfNotExist=true
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+
+app:
+  ai:
+    base-url: http://localhost:8317/v1
+    api-key: 111111
+    model: gemini-3-flash
+    temperature: 0.35
+    max-context-messages: 10
+  cors:
+    allowed-origins:
+      - http://localhost:5173
+      - http://127.0.0.1:5173
+
+logging:
+  level:
+    com.example.webshiyan2: info
