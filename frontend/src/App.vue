@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 import StatusPill from "./components/StatusPill.vue";
 import { api } from "./lib/api";
@@ -12,7 +12,8 @@ const statusError = ref("");
 const navItems = [
   { label: "系统总览", to: "/dashboard", tag: "Overview" },
   { label: "AI 会话", to: "/chat", tag: "Chat" },
-  { label: "知识库管理", to: "/knowledge", tag: "Knowledge" }
+  { label: "知识库管理", to: "/knowledge", tag: "Knowledge" },
+  { label: "模型设置", to: "/model-settings", tag: "Models" }
 ];
 
 const currentSection = computed(
@@ -32,7 +33,18 @@ async function loadSystemStatus() {
   }
 }
 
-onMounted(loadSystemStatus);
+function handleStatusRefresh() {
+  loadSystemStatus();
+}
+
+onMounted(() => {
+  loadSystemStatus();
+  window.addEventListener("system-status-updated", handleStatusRefresh);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("system-status-updated", handleStatusRefresh);
+});
 </script>
 
 <template>
@@ -75,8 +87,8 @@ onMounted(loadSystemStatus);
           <StatusPill
             v-if="systemStatus"
             :ready="systemStatus.aiReady"
-            :label="systemStatus.model"
-            :detail="systemStatus.aiReady ? '模型服务在线' : '模型服务离线'"
+            :label="systemStatus.activeConfigName || systemStatus.model"
+            :detail="systemStatus.aiReady ? `${systemStatus.model} 在线` : `${systemStatus.model} 离线`"
           />
           <button class="ghost-button" @click="loadSystemStatus">
             {{ loadingStatus ? "刷新中..." : "刷新状态" }}

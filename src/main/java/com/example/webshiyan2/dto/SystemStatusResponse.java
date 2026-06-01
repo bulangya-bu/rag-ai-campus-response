@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public record SystemStatusResponse(
         String database,
+        Long activeConfigId,
+        String activeConfigName,
         String model,
         String baseUrl,
         boolean aiReady,

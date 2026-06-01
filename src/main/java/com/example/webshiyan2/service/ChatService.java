@@ -78,7 +78,7 @@ public class ChatService {
 
         ChatMessage userMessage = saveMessage(session, "user", request.content().trim(), Collections.emptyList());
         maybeRenameSession(session, request.content());
-
+        mvn -s .mvn\local-settings.xml testmvn -s .mvn\local-settings.xml test
         List<KnowledgeDocument> relevantDocuments = knowledgeService.findRelevantDocuments(request.content(), 4);
         List<ChatMessage> history = chatMessageRepository.findBySession_IdOrderByCreatedAtAsc(sessionId);
         String assistantContent = aiGatewayService.generateAnswer(session, history, relevantDocuments);

@@ -2,6 +2,7 @@ package com.example.webshiyan2.service;
 
 import com.example.webshiyan2.config.AppProperties;
 import com.example.webshiyan2.dto.DashboardOverviewResponse;
+import com.example.webshiyan2.dto.ModelConfigResponse;
 import com.example.webshiyan2.dto.SystemStatusResponse;
 import org.springframework.stereotype.Service;
 
@@ -11,16 +12,16 @@ public class DashboardService {
     private final ChatService chatService;
     private final KnowledgeService knowledgeService;
     private final AiGatewayService aiGatewayService;
-    private final AppProperties appProperties;
+    private final ModelConfigService modelConfigService;
 
     public DashboardService(ChatService chatService,
                             KnowledgeService knowledgeService,
                             AiGatewayService aiGatewayService,
-                            AppProperties appProperties) {
+                            ModelConfigService modelConfigService) {
         this.chatService = chatService;
         this.knowledgeService = knowledgeService;
         this.aiGatewayService = aiGatewayService;
-        this.appProperties = appProperties;
+        this.modelConfigService = modelConfigService;
     }
 
     public DashboardOverviewResponse getOverview() {
@@ -35,10 +36,13 @@ public class DashboardService {
     }
 
     public SystemStatusResponse getSystemStatus() {
+        ModelConfigResponse activeConfig = modelConfigService.getActiveConfig();
         return new SystemStatusResponse(
                 "MySQL(localhost:3306/campus_ai_qa)",
-                appProperties.getAi().getModel(),
-                appProperties.getAi().getBaseUrl(),
+                activeConfig.id(),
+                activeConfig.name(),
+                activeConfig.model(),
+                activeConfig.baseUrl(),
                 aiGatewayService.pingModel(),
                 java.time.LocalDateTime.now()
         );

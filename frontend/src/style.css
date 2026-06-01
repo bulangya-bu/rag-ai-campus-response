@@ -337,7 +337,7 @@ button {
 
 .readiness-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -416,9 +416,14 @@ button {
   align-items: start;
 }
 
+.model-grid {
+  grid-template-columns: 380px minmax(0, 1fr);
+}
+
 .session-rail,
 .reference-rail,
-.knowledge-rail {
+.knowledge-rail,
+.model-rail {
   height: calc(100vh - 178px);
   overflow: auto;
 }
@@ -616,8 +621,107 @@ button {
   }
 }
 
+.config-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.config-row {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.config-row:hover,
+.config-row.selected {
+  transform: translateY(-1px);
+  border-color: rgba(117, 214, 164, 0.34);
+}
+
+.config-row.active {
+  background: rgba(117, 214, 164, 0.08);
+}
+
+.config-row-head,
+.config-row-actions,
+.stack-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.config-row p,
+.config-row small,
+.surface-tip,
+.field-hint,
+.result-banner p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.config-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(117, 214, 164, 0.18);
+  color: #dbffe8;
+  font-size: 0.85rem;
+}
+
+.mini-button {
+  min-height: 34px;
+  padding: 0 12px;
+}
+
+.surface-tip {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.field-hint {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.result-banner {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.result-banner.success {
+  border-color: rgba(117, 214, 164, 0.28);
+  background: rgba(117, 214, 164, 0.08);
+}
+
+.result-banner.warning {
+  border-color: rgba(245, 186, 118, 0.28);
+  background: rgba(245, 186, 118, 0.08);
+}
+
+.result-banner.error {
+  border-color: rgba(255, 140, 130, 0.28);
+  background: rgba(255, 140, 130, 0.08);
+}
+
+.wrap-actions {
+  align-items: flex-end;
+}
+
 @media (max-width: 1280px) {
   .workspace-grid,
+  .model-grid,
   .knowledge-grid,
   .dashboard-grid,
   .readiness-grid,

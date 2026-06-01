@@ -4,6 +4,7 @@ import com.example.webshiyan2.config.AppProperties;
 import com.example.webshiyan2.entity.ChatMessage;
 import com.example.webshiyan2.entity.ChatSession;
 import com.example.webshiyan2.entity.KnowledgeDocument;
+import com.example.webshiyan2.entity.AiModelConfig;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,17 +20,16 @@ import java.util.stream.Collectors;
 public class AiGatewayService {
 
     private final AppProperties appProperties;
-    private final RestClient restClient;
+    private final ModelConfigService modelConfigService;
 
-    public AiGatewayService(AppProperties appProperties) {
+    public AiGatewayService(AppProperties appProperties, ModelConfigService modelConfigService) {
         this.appProperties = appProperties;
-        this.restClient = RestClient.builder()
-                .baseUrl(appProperties.getAi().getBaseUrl())
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + appProperties.getAi().getApiKey())
-                .build();
+        this.modelConfigService = modelConfigService;
     }
 
     public String generateAnswer(ChatSession session, List<ChatMessage> history, List<KnowledgeDocument> relevantDocuments) {
+        AiModelConfig activeConfig = modelConfigService.getActiveEntity();
+        RestClient restClient = buildClient(activeConfig);
         List<AiMessage> messages = new ArrayList<>();
         messages.add(new AiMessage("system", buildSystemPrompt(relevantDocuments)));
 
@@ -39,7 +39,7 @@ public class AiGatewayService {
                 .forEach(messages::add);
 
         ChatCompletionRequest request = new ChatCompletionRequest(
-                appProperties.getAi().getModel(),
+                activeConfig.getModel(),
                 messages,
                 appProperties.getAi().getTemperature()
         );
@@ -63,6 +63,7 @@ public class AiGatewayService {
 
     public boolean pingModel() {
         try {
+            RestClient restClient = buildClient(modelConfigService.getActiveEntity());
             restClient.get()
                     .uri("/models")
                     .retrieve()
@@ -71,6 +72,13 @@ public class AiGatewayService {
         } catch (Exception ex) {
             return false;
         }
+    }
+
+    private RestClient buildClient(AiModelConfig activeConfig) {
+        return RestClient.builder()
+                .baseUrl(activeConfig.getBaseUrl())
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + activeConfig.getApiKey())
+                .build();
     }
 
     private String buildSystemPrompt(List<KnowledgeDocument> relevantDocuments) {

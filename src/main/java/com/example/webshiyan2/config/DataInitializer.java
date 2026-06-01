@@ -1,6 +1,7 @@
 package com.example.webshiyan2.config;
 
 import com.example.webshiyan2.entity.KnowledgeDocument;
+import com.example.webshiyan2.service.ModelConfigService;
 import com.example.webshiyan2.service.KnowledgeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -79,6 +80,11 @@ public class DataInitializer {
                         "一卡通中心"
                 )
         ));
+    }
+
+    @Bean
+    CommandLineRunner seedModelConfigs(ModelConfigService modelConfigService, AppProperties appProperties) {
+        return args -> modelConfigService.seedDefaultConfig(appProperties.getAi());
     }
 
     private KnowledgeDocument document(String title,

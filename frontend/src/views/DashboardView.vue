@@ -122,6 +122,10 @@ onMounted(loadOverview);
           <strong>{{ overview.systemStatus.database }}</strong>
         </div>
         <div>
+          <span>激活配置</span>
+          <strong>{{ overview.systemStatus.activeConfigName }}</strong>
+        </div>
+        <div>
           <span>模型</span>
           <strong>{{ overview.systemStatus.model }}</strong>
         </div>

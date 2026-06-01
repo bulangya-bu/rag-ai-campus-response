@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "../views/DashboardView.vue";
 import ChatView from "../views/ChatView.vue";
 import KnowledgeView from "../views/KnowledgeView.vue";
+import ModelConfigView from "../views/ModelConfigView.vue";
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
     path: "/knowledge",
     name: "knowledge",
     component: KnowledgeView
+  },
+  {
+    path: "/model-settings",
+    name: "model-settings",
+    component: ModelConfigView
   }
 ];
 

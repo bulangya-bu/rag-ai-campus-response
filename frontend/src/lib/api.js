@@ -28,6 +28,40 @@ export const api = {
   getSystemStatus() {
     return request("/system/status");
   },
+  listModelConfigs() {
+    return request("/model-configs");
+  },
+  getActiveModelConfig() {
+    return request("/model-configs/active");
+  },
+  createModelConfig(data) {
+    return request("/model-configs", {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+  },
+  updateModelConfig(id, data) {
+    return request(`/model-configs/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data)
+    });
+  },
+  activateModelConfig(id) {
+    return request(`/model-configs/${id}/activate`, {
+      method: "POST"
+    });
+  },
+  testModelConfig(data) {
+    return request("/model-configs/test", {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+  },
+  deleteModelConfig(id) {
+    return request(`/model-configs/${id}`, {
+      method: "DELETE"
+    });
+  },
   listSessions() {
     return request("/chat/sessions");
   },
